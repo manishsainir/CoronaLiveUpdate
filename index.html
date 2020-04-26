@@ -19,10 +19,13 @@
                     <option disabled="disabled" selected="selected">select State</option>
                     <br>
                 </select><br>
-                <label style="color: blueviolet; font-size: larger;">State Corona Cases of :</label>&nbsp;&nbsp;<label style="color: blueviolet;" id="stateHead"></label><br>
-                <label>Total Confirmed:</label>&nbsp;&nbsp; <label id="totalConfirmed" style="color: blue;"></label><br>
-                <label>Total Deceased:</label>&nbsp;&nbsp;<label id="totalDeceased" style="color: brown;"></label><br>
-                <label>Total Recovered:</label>&nbsp;&nbsp;<label id="totalRecovered" style="color:green;"></label>
+                <div id="stateHead">
+                    <label style="color: blueviolet; font-size: larger;">State Corona Cases of
+                        :</label>&nbsp;&nbsp;<label id="stateCases" style="color: blueviolet;"></label><br>
+                    <label>Total Confirmed:</label>&nbsp;&nbsp; <label id="totalConfirmed" style="color: blue;"></label><br>
+                    <label>Total Deceased:</label>&nbsp;&nbsp;<label id="totalDeceased" style="color: brown;"></label><br>
+                    <label>Total Recovered:</label>&nbsp;&nbsp;<label id="totalRecovered" style="color:green;"></label>
+                </div>
             </div>
             <div class="col-6 col-md-4">
 
@@ -38,27 +41,29 @@
     <br><br>
 
     <div class="container">
-        <label style="font-size: larger; color: teal;" id="tableLabel">Total District Corona Cases Till
-            Now:</label><br>
-        <div class="row">
+        <div id="tableHide">
+            <label style="font-size: larger; color: teal;">Total District Corona Cases Till
+                Now:</label><br>
+            <div class="row">
 
-            <table border="1" id="tableData">
-                <thead title="Total District Corona Cases Till Now">
-                    <tr>
-                        <th class="bg-info">Total Active</th>
-                        <th class="bg-warning">Total Confirmed</th>
-                        <th class="bg-danger">Total Deceased</th>
-                        <th class="bg-success">Total Recovered</th>
-                        <th class="bg-warning">New Confirmed</th>
-                        <th class="bg-danger">New Deceased</th>
-                        <th class="bg-success">New Recovered</th>
-                    </tr>
-                </thead>
-                <tbody>
+                <table border="1" id="tableData">
+                    <thead title="Total District Corona Cases Till Now">
+                        <tr>
+                            <th class="bg-info">Total Active</th>
+                            <th class="bg-warning">Total Confirmed</th>
+                            <th class="bg-danger">Total Deceased</th>
+                            <th class="bg-success">Total Recovered</th>
+                            <th class="bg-warning">New Confirmed</th>
+                            <th class="bg-danger">New Deceased</th>
+                            <th class="bg-success">New Recovered</th>
+                        </tr>
+                    </thead>
+                    <tbody>
 
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
 
+            </div>
         </div>
     </div>
 
@@ -69,8 +74,9 @@
         $(document)
             .ready(
                 function() {
-                    $("#tableData").hide();
-                    $("#tableLabel").hide();
+                    $("#tableHide").hide();
+                    $("#stateHead").hide();
+
                     $.getJSON("https://api.covid19india.org/v2/state_district_wise.json", function(obj) {
                         for (i = 0; i < obj.length; i++) {
                             $("#state").append("<option value=" + obj[i].statecode.toLowerCase() + ">" +
@@ -82,13 +88,15 @@
                         $("#state")
                             .change(
                                 function() {
-                                    $("#stateHead").empty();
+                                    $("#tableHide").hide();
+                                    $("#stateHead").show();
+                                    $("#stateCases").empty();
                                     $.getJSON("https://api.covid19india.org/states_daily.json", function(data) {
 
                                         var state = $("#state option:selected").val();
                                         var size = data.states_daily.length;
 
-                                        $("#stateHead").text(data.states_daily[size - 3].date);
+                                        $("#stateCases").text(data.states_daily[size - 3].date);
                                         $("#totalConfirmed").text(data.states_daily[size - 3][state]);
                                         $("#totalRecovered").text(data.states_daily[size - 2][state]);
                                         $("#totalDeceased").text(data.states_daily[size - 1][state]);
@@ -118,8 +126,8 @@
                             .change(
                                 function() {
                                     $("#tableData").find("tbody").empty();
-                                    $("#tableLabel").show();
-                                    $("#tableData").show();
+
+                                    $("#tableHide").show();
 
                                     for (i = 0; i < obj.length; i++) {
                                         if (obj[i].state == $(
