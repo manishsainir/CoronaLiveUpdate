@@ -17,8 +17,12 @@
                 <label>Select State</label>
                 <select id="state" class="custom-select my-select">
                     <option disabled="disabled" selected="selected">select State</option>
-                </select>
-
+                    <br>
+                </select><br>
+                <label style="color: blueviolet; font-size: larger;">State Corona Cases of :</label>&nbsp;&nbsp;<label style="color: blueviolet;" id="stateHead"></label><br>
+                <label>Total Confirmed:</label>&nbsp;&nbsp; <label id="totalConfirmed" style="color: blue;"></label><br>
+                <label>Total Deceased:</label>&nbsp;&nbsp;<label id="totalDeceased" style="color: brown;"></label><br>
+                <label>Total Recovered:</label>&nbsp;&nbsp;<label id="totalRecovered" style="color:green;"></label>
             </div>
             <div class="col-6 col-md-4">
 
@@ -32,10 +36,14 @@
         </div>
     </div>
     <br><br>
+
     <div class="container">
+        <label style="font-size: larger; color: teal;" id="tableLabel">Total District Corona Cases Till
+            Now:</label><br>
         <div class="row">
+
             <table border="1" id="tableData">
-                <thead>
+                <thead title="Total District Corona Cases Till Now">
                     <tr>
                         <th class="bg-info">Total Active</th>
                         <th class="bg-warning">Total Confirmed</th>
@@ -50,6 +58,7 @@
 
                 </tbody>
             </table>
+
         </div>
     </div>
 
@@ -61,9 +70,10 @@
             .ready(
                 function() {
                     $("#tableData").hide();
+                    $("#tableLabel").hide();
                     $.getJSON("https://api.covid19india.org/v2/state_district_wise.json", function(obj) {
                         for (i = 0; i < obj.length; i++) {
-                            $("#state").append("<option >" +
+                            $("#state").append("<option value=" + obj[i].statecode.toLowerCase() + ">" +
                                 obj[i].state +
                                 "</option>");
                         }
@@ -72,6 +82,17 @@
                         $("#state")
                             .change(
                                 function() {
+                                    $("#stateHead").empty();
+                                    $.getJSON("https://api.covid19india.org/states_daily.json", function(data) {
+
+                                        var state = $("#state option:selected").val();
+                                        var size = data.states_daily.length;
+
+                                        $("#stateHead").text(data.states_daily[size - 3].date);
+                                        $("#totalConfirmed").text(data.states_daily[size - 3][state]);
+                                        $("#totalRecovered").text(data.states_daily[size - 2][state]);
+                                        $("#totalDeceased").text(data.states_daily[size - 1][state]);
+                                    });
                                     $("#tableData").find("tbody").empty();
                                     for (j = 0; j < obj.length; j++) {
 
@@ -97,6 +118,7 @@
                             .change(
                                 function() {
                                     $("#tableData").find("tbody").empty();
+                                    $("#tableLabel").show();
                                     $("#tableData").show();
 
                                     for (i = 0; i < obj.length; i++) {
@@ -104,8 +126,8 @@
                                                 "#state option:selected").text()) {
                                             for (j = 0; j < obj[i].districtData.length; j++) {
                                                 if (obj[i].districtData[j].district == $(
-                                                        "#district")
-                                                    .val()) {
+                                                        "#district option:selected")
+                                                    .text()) {
                                                     $("#tableData").find("tbody")
                                                         .append(
                                                             "<tr><td class='table-info'>" +
