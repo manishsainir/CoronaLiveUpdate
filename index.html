@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Corona Live Update</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.5.0.js" integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc=" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-6 col-md-4">
+
+                <label>Select State</label>
+                <select id="state" class="custom-select my-select">
+                    <option disabled="disabled" selected="selected">select State</option>
+                </select>
+
+            </div>
+            <div class="col-6 col-md-4">
+
+                <label>Select District</label>
+                <select id="district" class="custom-select my-select">
+                    <option disabled="disabled" selected="selected">select
+                        District</option>
+                </select>
+
+            </div>
+        </div>
+    </div>
+    <br><br>
+    <div class="container">
+        <div class="row">
+            <table border="1" id="tableData">
+                <thead>
+                    <tr>
+                        <th class="bg-info">Total Active</th>
+                        <th class="bg-warning">Total Confirmed</th>
+                        <th class="bg-danger">Total Deceased</th>
+                        <th class="bg-success">Total Recovered</th>
+                        <th class="bg-warning">New Confirmed</th>
+                        <th class="bg-danger">New Deceased</th>
+                        <th class="bg-success">New Recovered</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <br>
+    <br>
+
+    <script type="text/javascript">
+        $(document)
+            .ready(
+                function() {
+                    $("#tableData").hide();
+                    $.getJSON("https://api.covid19india.org/v2/state_district_wise.json", function(obj) {
+                        for (i = 0; i < obj.length; i++) {
+                            $("#state").append("<option >" +
+                                obj[i].state +
+                                "</option>");
+                        }
+
+                        console.log("ready");
+                        $("#state")
+                            .change(
+                                function() {
+                                    $("#tableData").find("tbody").empty();
+                                    for (j = 0; j < obj.length; j++) {
+
+                                        if (obj[j].state == $("#state option:selected")
+                                            .text()) {
+                                            console.log("state");
+                                            str = "<option disabled='disabled' selected='selected'>select District</option>";
+                                            for (i = 0; i < obj[j].districtData.length; i++) {
+                                                str = str +
+                                                    "<option>" +
+                                                    obj[j].districtData[i].district +
+                                                    "</option>";
+                                            }
+                                            $("#district")
+                                                .html(str);
+                                            break;
+                                        }
+                                    }
+                                });
+
+
+                        $("#district")
+                            .change(
+                                function() {
+                                    $("#tableData").find("tbody").empty();
+                                    $("#tableData").show();
+
+                                    for (i = 0; i < obj.length; i++) {
+                                        if (obj[i].state == $(
+                                                "#state option:selected").text()) {
+                                            for (j = 0; j < obj[i].districtData.length; j++) {
+                                                if (obj[i].districtData[j].district == $(
+                                                        "#district")
+                                                    .val()) {
+                                                    $("#tableData").find("tbody")
+                                                        .append(
+                                                            "<tr><td class='table-info'>" +
+                                                            obj[i].districtData[j].active +
+                                                            "</td><td class='table-warning'>" +
+                                                            obj[i].districtData[j].confirmed +
+                                                            "</td><td class='table-danger'>" +
+                                                            obj[i].districtData[j].deceased +
+                                                            "</td><td class='table-success'>" +
+                                                            obj[i].districtData[j].recovered +
+                                                            "</td><td class='table-warning'>" +
+                                                            obj[i].districtData[j].delta.confirmed +
+                                                            "</td><td class='table-danger'>" +
+                                                            obj[i].districtData[j].delta.deceased +
+                                                            "</td><td class='table-success'>" +
+                                                            obj[i].districtData[j].delta.recovered +
+                                                            "</td></tr>");
+                                                }
+                                            }
+                                            break;
+                                        }
+                                    }
+
+
+                                })
+                    });
+                });
+    </script>
+</body>
+<footer>
+    <p>&copy; Posted by: Manish Saini</p>
+</footer>
+
+</html>
