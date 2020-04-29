@@ -9,66 +9,131 @@
     <script src="https://code.jquery.com/jquery-3.5.0.js" integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc=" crossorigin="anonymous"></script>
 </head>
 
-<body>
-    <div class="container">
-        <div class="row">
-            <div class="col-6 col-md-4">
+<body class="p-3">
 
-                <label>Select State</label>
+    <div class="container-fluid">
+        <div class="row ">
+            <div class="col">
+                <h4 class="text-light bg-info text-center card font-weight-bold">India Covid19 Cases Live Update
+                </h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="card bg-primary col m-2">
+                <div class="card-body text-center ">
+                    <p class="card-text " id="totalCases">Total Cases</p>
+                </div>
+            </div>
+            <div class="card bg-warning col m-2 ">
+                <div class="card-body text-center ">
+                    <p class="card-text " id="active">Active Cases</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="card bg-success col m-2">
+                <div class="card-body text-center ">
+                    <p class="card-text " id="recovered">Recovered</p>
+                </div>
+            </div>
+            <div class="card bg-danger col m-2">
+                <div class="card-body text-center ">
+                    <p class="card-text " id="deaths">Deaths</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <button type="button" id="actionStateList" class="btn btn-secondary btn-lg btn-block">Click To See List Of All State</button>
+                <div class="table-responsive-lg">
+                    <table border="1" class="mt-2 table table-sm">
+                        <thead title="List of State" id="stateList" class="thead-dark">
+                            <tr>
+                                <th>Name</th>
+                                <th>Total</th>
+                                <th>Active</th>
+                                <th>Recovered</th>
+                                <th>Deceased</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="row">
+
+            <div class="col-6 col-md-4 p-2">
+
+                <label>Select State:</label>
                 <select id="state" class="custom-select my-select">
                     <option disabled="disabled" selected="selected">select State</option>
                     <br>
                 </select><br>
-                <div id="stateHead">
-                    <label style="color: blueviolet; font-size: larger;">State Corona Cases of
-                        :</label>&nbsp;&nbsp;<label id="stateCases" style="color: blueviolet;"></label><br>
-                    <label>Total Confirmed:</label>&nbsp;&nbsp; <label id="totalConfirmed" style="color: blue;"></label><br>
-                    <label>Total Deceased:</label>&nbsp;&nbsp;<label id="totalDeceased" style="color: brown;"></label><br>
-                    <label>Total Recovered:</label>&nbsp;&nbsp;<label id="totalRecovered" style="color:green;"></label>
-                </div>
-            </div>
-            <div class="col-6 col-md-4">
 
-                <label>Select District</label>
+            </div>
+
+            <div class="col-6 col-md-4 p-2">
+
+                <label>Select District:</label>
                 <select id="district" class="custom-select my-select">
                     <option disabled="disabled" selected="selected">select
                         District</option>
                 </select>
 
             </div>
+
+
         </div>
-    </div>
-    <br><br>
+        <div class="row">
+            <div class=" col text-center">
+                <div id="stateHead" class="m-2">
+                    <div class="p-3 mb-2 bg-secondary text-white">
+                        <label>State Corona Cases of
+                            :</label>&nbsp;&nbsp;<label id="stateCases"></label><br>
+                        <label>Total Confirmed:</label>&nbsp;&nbsp; <label id="totalConfirmed"></label><br>
+                        <label>Total Deceased:</label>&nbsp;&nbsp;<label id="totalDeceased"></label><br>
+                        <label>Total Recovered:</label>&nbsp;&nbsp;<label id="totalRecovered"></label>
+                    </div>
+                </div>
+            </div>
 
-    <div class="container">
-        <div id="tableHide">
-            <label style="font-size: larger; color: teal;">Total District Corona Cases Till
-                Now:</label><br>
-            <div class="row">
+        </div>
 
-                <table border="1" id="tableData">
-                    <thead title="Total District Corona Cases Till Now">
-                        <tr>
-                            <th class="bg-info">Total Active</th>
-                            <th class="bg-warning">Total Confirmed</th>
-                            <th class="bg-danger">Total Deceased</th>
-                            <th class="bg-success">Total Recovered</th>
-                            <th class="bg-warning">New Confirmed</th>
-                            <th class="bg-danger">New Deceased</th>
-                            <th class="bg-success">New Recovered</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-
-                    </tbody>
-                </table>
-
+        <div class="row">
+            <div class="col">
+                <div id="tableHide">
+                    <label style="font-size: larger; ">Total District Corona Cases Till
+                        Now:</label>
+                    <div class="table-responsive-lg">
+                        <table border="1" id="tableData" class="mt-2 table table-sm">
+                            <thead title="Total District Corona Cases Till Now">
+                                <tr>
+                                    <th class="bg-info">Total Active</th>
+                                    <th class="bg-warning">Total Confirmed</th>
+                                    <th class="bg-danger">Total Deceased</th>
+                                    <th class="bg-success">Total Recovered</th>
+                                    <th class="bg-warning">New Confirmed</th>
+                                    <th class="bg-danger">New Deceased</th>
+                                    <th class="bg-success">New Recovered</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
+
+
     </div>
 
-    <br>
-    <br>
 
     <script type="text/javascript">
         $(document)
@@ -76,6 +141,45 @@
                 function() {
                     $("#tableHide").hide();
                     $("#stateHead").hide();
+                    $("#stateList").hide();
+
+                    $.getJSON("https://api.apify.com/v2/key-value-stores/toDWvRj1JpTXiM8FF/records/LATEST?disableRedirect=true", function(data) {
+                        $("#active").after(data.activeCases);
+                        $("#recovered").after(data.recovered);
+                        $("#deaths").after(data.deaths);
+                        $("#totalCases").after(data.totalCases);
+
+                    });
+                    count = 0;
+                    $("#actionStateList").click(function() {
+                        count++;
+                        if (count % 2 != 0) {
+                            $("#actionStateList").html("Click To Hide List Of All State");
+                            console.log(count);
+                        } else {
+                            $("#actionStateList").html("Click To See List Of All State");
+                        }
+                        $("#stateList").toggle();
+                        $.getJSON("http://covid19-india-adhikansh.herokuapp.com/states", function(obj) {
+                            console.log(obj.state);
+                            for (i = 0; i < obj.state.length; i++) {
+                                $("#stateList")
+                                    .append(
+                                        "<tr><td >" +
+                                        obj.state[i].name +
+                                        "</td><td >" +
+                                        obj.state[i].total +
+                                        "</td><td >" +
+                                        obj.state[i].confirmed +
+                                        "</td><td >" +
+                                        obj.state[i].cured +
+                                        "</td><td >" +
+                                        obj.state[i].death +
+                                        "</td></tr>");
+                            }
+                        });
+
+                    })
 
                     $.getJSON("https://api.covid19india.org/v2/state_district_wise.json", function(obj) {
                         for (i = 0; i < obj.length; i++) {
@@ -164,8 +268,9 @@
                     });
                 });
     </script>
+
 </body>
-<footer>
+<footer class="pt-5">
     <p>&copy; Posted by: Manish Saini</p>
 </footer>
 
