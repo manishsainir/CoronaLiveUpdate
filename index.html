@@ -9,10 +9,9 @@
     <script src="https://code.jquery.com/jquery-3.5.0.js" integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc=" crossorigin="anonymous"></script>
 </head>
 
-<body class="p-3">
-
-    <div class="container-fluid">
-        <div class="row ">
+<body>
+    <div class="container-fluid mt-2">
+        <div class="row">
             <div class="col">
                 <h4 class="text-light bg-info text-center card font-weight-bold">India Covid19 Cases Live Update
                 </h4>
@@ -44,7 +43,8 @@
         </div>
         <div class="row">
             <div class="col">
-                <button type="button" id="actionStateList" class="btn btn-secondary btn-lg btn-block">Click To See List Of All State</button>
+                <button type="button" id="actionStateList" class="btn btn-secondary btn-lg btn-block">Click To See List
+                    Of All State</button>
                 <div class="table-responsive-lg">
                     <table border="1" class="mt-2 table table-sm">
                         <thead title="List of State" id="stateList" class="thead-dark">
@@ -132,142 +132,142 @@
         </div>
 
 
-    </div>
 
 
-    <script type="text/javascript">
-        $(document)
-            .ready(
-                function() {
-                    $("#tableHide").hide();
-                    $("#stateHead").hide();
-                    $("#stateList").hide();
 
-                    $.getJSON("https://api.apify.com/v2/key-value-stores/toDWvRj1JpTXiM8FF/records/LATEST?disableRedirect=true", function(data) {
-                        $("#active").after(data.activeCases);
-                        $("#recovered").after(data.recovered);
-                        $("#deaths").after(data.deaths);
-                        $("#totalCases").after(data.totalCases);
+        <script type="text/javascript">
+            $(document)
+                .ready(
+                    function() {
+                        $("#tableHide").hide();
+                        $("#stateHead").hide();
+                        $("#stateList").hide();
 
-                    });
-                    count = 0;
-                    $("#actionStateList").click(function() {
-                        count++;
-                        if (count % 2 != 0) {
-                            $("#actionStateList").html("Click To Hide List Of All State");
-                            console.log(count);
-                        } else {
-                            $("#actionStateList").html("Click To See List Of All State");
-                        }
-                        $("#stateList").toggle();
-                        $.getJSON("http://covid19-india-adhikansh.herokuapp.com/states", function(obj) {
-                            console.log(obj.state);
-                            for (i = 0; i < obj.state.length; i++) {
-                                $("#stateList")
-                                    .append(
-                                        "<tr><td >" +
-                                        obj.state[i].name +
-                                        "</td><td >" +
-                                        obj.state[i].total +
-                                        "</td><td >" +
-                                        obj.state[i].confirmed +
-                                        "</td><td >" +
-                                        obj.state[i].cured +
-                                        "</td><td >" +
-                                        obj.state[i].death +
-                                        "</td></tr>");
-                            }
+                        $.getJSON("https://api.apify.com/v2/key-value-stores/toDWvRj1JpTXiM8FF/records/LATEST?disableRedirect=true", function(data) {
+                            $("#active").after(data.activeCases);
+                            $("#recovered").after(data.recovered);
+                            $("#deaths").after(data.deaths);
+                            $("#totalCases").after(data.totalCases);
+
                         });
+                        count = 0;
+                        $("#actionStateList").click(function() {
+                            count++;
+                            if (count % 2 != 0) {
+                                $("#actionStateList").html("Click To Hide List Of All State");
+                                console.log(count);
+                            } else {
+                                $("#actionStateList").html("Click To See List Of All State");
+                            }
+                            $("#stateList").toggle();
+                            $.getJSON("http://covid19-india-adhikansh.herokuapp.com/states", function(obj) {
+                                console.log(obj.state);
+                                for (i = 0; i < obj.state.length; i++) {
+                                    $("#stateList")
+                                        .append(
+                                            "<tr><td >" +
+                                            obj.state[i].name +
+                                            "</td><td >" +
+                                            obj.state[i].total +
+                                            "</td><td >" +
+                                            obj.state[i].confirmed +
+                                            "</td><td >" +
+                                            obj.state[i].cured +
+                                            "</td><td >" +
+                                            obj.state[i].death +
+                                            "</td></tr>");
+                                }
+                            });
 
-                    })
+                        })
 
-                    $.getJSON("https://api.covid19india.org/v2/state_district_wise.json", function(obj) {
-                        for (i = 0; i < obj.length; i++) {
-                            $("#state").append("<option value=" + obj[i].statecode.toLowerCase() + ">" +
-                                obj[i].state +
-                                "</option>");
-                        }
+                        $.getJSON("https://api.covid19india.org/v2/state_district_wise.json", function(obj) {
+                            for (i = 0; i < obj.length; i++) {
+                                $("#state").append("<option value=" + obj[i].statecode.toLowerCase() + ">" +
+                                    obj[i].state +
+                                    "</option>");
+                            }
 
-                        console.log("ready");
-                        $("#state")
-                            .change(
-                                function() {
-                                    $("#tableHide").hide();
-                                    $("#stateHead").show();
-                                    $("#stateCases").empty();
-                                    $.getJSON("https://api.covid19india.org/states_daily.json", function(data) {
+                            console.log("ready");
+                            $("#state")
+                                .change(
+                                    function() {
+                                        $("#tableHide").hide();
+                                        $("#stateHead").show();
+                                        $("#stateCases").empty();
+                                        $.getJSON("https://api.covid19india.org/states_daily.json", function(data) {
 
-                                        var state = $("#state option:selected").val();
-                                        var size = data.states_daily.length;
+                                            var state = $("#state option:selected").val();
+                                            var size = data.states_daily.length;
 
-                                        $("#stateCases").text(data.states_daily[size - 3].date);
-                                        $("#totalConfirmed").text(data.states_daily[size - 3][state]);
-                                        $("#totalRecovered").text(data.states_daily[size - 2][state]);
-                                        $("#totalDeceased").text(data.states_daily[size - 1][state]);
-                                    });
-                                    $("#tableData").find("tbody").empty();
-                                    for (j = 0; j < obj.length; j++) {
+                                            $("#stateCases").text(data.states_daily[size - 3].date);
+                                            $("#totalConfirmed").text(data.states_daily[size - 3][state]);
+                                            $("#totalRecovered").text(data.states_daily[size - 2][state]);
+                                            $("#totalDeceased").text(data.states_daily[size - 1][state]);
+                                        });
+                                        $("#tableData").find("tbody").empty();
+                                        for (j = 0; j < obj.length; j++) {
 
-                                        if (obj[j].state == $("#state option:selected")
-                                            .text()) {
-                                            console.log("state");
-                                            str = "<option disabled='disabled' selected='selected'>select District</option>";
-                                            for (i = 0; i < obj[j].districtData.length; i++) {
-                                                str = str +
-                                                    "<option>" +
-                                                    obj[j].districtData[i].district +
-                                                    "</option>";
-                                            }
-                                            $("#district")
-                                                .html(str);
-                                            break;
-                                        }
-                                    }
-                                });
-
-
-                        $("#district")
-                            .change(
-                                function() {
-                                    $("#tableData").find("tbody").empty();
-
-                                    $("#tableHide").show();
-
-                                    for (i = 0; i < obj.length; i++) {
-                                        if (obj[i].state == $(
-                                                "#state option:selected").text()) {
-                                            for (j = 0; j < obj[i].districtData.length; j++) {
-                                                if (obj[i].districtData[j].district == $(
-                                                        "#district option:selected")
-                                                    .text()) {
-                                                    $("#tableData").find("tbody")
-                                                        .append(
-                                                            "<tr><td class='table-info'>" +
-                                                            obj[i].districtData[j].active +
-                                                            "</td><td class='table-warning'>" +
-                                                            obj[i].districtData[j].confirmed +
-                                                            "</td><td class='table-danger'>" +
-                                                            obj[i].districtData[j].deceased +
-                                                            "</td><td class='table-success'>" +
-                                                            obj[i].districtData[j].recovered +
-                                                            "</td><td class='table-warning'>" +
-                                                            obj[i].districtData[j].delta.confirmed +
-                                                            "</td><td class='table-danger'>" +
-                                                            obj[i].districtData[j].delta.deceased +
-                                                            "</td><td class='table-success'>" +
-                                                            obj[i].districtData[j].delta.recovered +
-                                                            "</td></tr>");
+                                            if (obj[j].state == $("#state option:selected")
+                                                .text()) {
+                                                console.log("state");
+                                                str = "<option disabled='disabled' selected='selected'>select District</option>";
+                                                for (i = 0; i < obj[j].districtData.length; i++) {
+                                                    str = str +
+                                                        "<option>" +
+                                                        obj[j].districtData[i].district +
+                                                        "</option>";
                                                 }
+                                                $("#district")
+                                                    .html(str);
+                                                break;
                                             }
-                                            break;
                                         }
-                                    }
+                                    });
 
 
-                                })
+                            $("#district")
+                                .change(
+                                    function() {
+                                        $("#tableData").find("tbody").empty();
+
+                                        $("#tableHide").show();
+
+                                        for (i = 0; i < obj.length; i++) {
+                                            if (obj[i].state == $(
+                                                    "#state option:selected").text()) {
+                                                for (j = 0; j < obj[i].districtData.length; j++) {
+                                                    if (obj[i].districtData[j].district == $(
+                                                            "#district option:selected")
+                                                        .text()) {
+                                                        $("#tableData").find("tbody")
+                                                            .append(
+                                                                "<tr><td class='table-info'>" +
+                                                                obj[i].districtData[j].active +
+                                                                "</td><td class='table-warning'>" +
+                                                                obj[i].districtData[j].confirmed +
+                                                                "</td><td class='table-danger'>" +
+                                                                obj[i].districtData[j].deceased +
+                                                                "</td><td class='table-success'>" +
+                                                                obj[i].districtData[j].recovered +
+                                                                "</td><td class='table-warning'>" +
+                                                                obj[i].districtData[j].delta.confirmed +
+                                                                "</td><td class='table-danger'>" +
+                                                                obj[i].districtData[j].delta.deceased +
+                                                                "</td><td class='table-success'>" +
+                                                                obj[i].districtData[j].delta.recovered +
+                                                                "</td></tr>");
+                                                    }
+                                                }
+                                                break;
+                                            }
+                                        }
+
+
+                                    })
+                        });
                     });
-                });
-    </script>
+        </script>
 
 </body>
 <footer class="pt-5">
